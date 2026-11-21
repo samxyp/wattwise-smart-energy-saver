@@ -1,83 +1,113 @@
-# WattWise — Smart Energy Saver (SDG 7)
+# WattWise — Smart Energy Saver ⚡
 
-A responsive front-end student project that estimates household appliance electricity consumption and cost. This edition uses a royal-blue and metallic-gold theme and adds saved daily and weekly estimated electricity-cost limits with a custom warning modal.
+**WattWise** is a web-based energy management application designed to help households understand their electricity consumption, estimate energy costs, and identify opportunities to save electricity.
 
-## Files
-- `index.html` — page structure and forms
-- `styles.css` — responsive navy, royal-blue and gold design
-- `app.js` — calculations, charts, appliance management, persistence and limit warnings
+🌐 **Live website:** https://samxyp.github.io/wattwise-smart-energy-saver/
 
-## Run locally
-1. Open this folder in Visual Studio Code.
-2. Open `index.html` in a browser, or use the Live Server extension.
-3. Internet is needed for Google Fonts and Chart.js CDN. The calculator still works without Chart.js, but the doughnut chart requires the Chart.js library to load.
+## 📌 Project Overview
 
-## Features
-- Appliance calculator: wattage, quantity and daily operating hours
-- Daily, weekly and monthly kWh/cost estimates
-- User-defined tariff in naira per kWh
-- Monthly summary metrics and doughnut chart
-- Add, edit, remove, clear and load sample appliances
-- Daily and weekly estimated cost limits saved in `localStorage`
-- Custom accessible limit-exceeded modal that reports exact overage
-- Responsive layout and energy-saving suggestions
+Electricity expenses can be difficult to manage when users do not understand how much energy their appliances consume. WattWise addresses this problem by allowing users to enter appliance details, estimate electricity consumption, calculate costs, and monitor spending against user-defined limits.
 
-## Formulas
-Daily energy (kWh) = watts × quantity × hours/day ÷ 1,000.
-Period energy (kWh) = daily energy × number of days (1, 7 or 30).
-Estimated cost = energy (kWh) × tariff (₦/kWh).
+The project supports **United Nations Sustainable Development Goal 7 (SDG 7): Affordable and Clean Energy**, particularly the promotion of energy efficiency.
 
-Daily and weekly limits refer to estimated electricity COST, not kWh or a live prepaid-meter balance. Weekly cost is the daily estimate multiplied by seven. A modal is shown when adding/updating an appliance or changing the tariff causes a total to cross a saved limit. Saving a limit lower than the current total also triggers a warning.
+## 🎯 Objectives
 
-## Important limitations
-- This is an estimate, not a live electricity meter reading.
-- Appliance power, runtime and tariff are entered by the user.
-- Local storage is tied to the current browser/device and can be cleared by the user.
-- It does not connect to a utility provider, prepaid meter or actual carbon-emissions dataset.
-- The sample tariff of ₦100/kWh is illustrative only; use the tariff that applies to the consumer.
+- Estimate electricity consumption for household appliances.
+- Calculate estimated electricity costs using a user-entered tariff.
+- Identify appliances with relatively high estimated energy consumption.
+- Help users monitor daily and weekly electricity spending limits.
+- Provide practical energy-saving tips.
+- Demonstrate how a web application can support responsible electricity usage.
 
+## ✨ Features
 
-## Recent additions
-- One-second WattWise branded splash screen before the dashboard.
-- Meter connection explainer: distinguishes a whole-home meter reading from appliance-level monitoring. The button is informational only; no hardware is connected.
-- JavaScript comments explain the major calculation, rendering, storage, and event-handling sections.
-- Project report: see `WattWise_Project_Report.pdf` (provided separately with the project ZIP).
+- **Appliance calculator:** Enter appliance power ratings, quantities, and daily usage hours.
+- **Cost estimation:** Calculate estimated electricity costs using the tariff entered by the user.
+- **Consumption dashboard:** View estimated energy usage and costs across different periods.
+- **Visualisation:** Display consumption information using a doughnut chart.
+- **Budget alerts:** Set daily and weekly spending limits and receive warnings when estimated costs exceed them.
+- **Appliance management:** Add, edit, and remove appliances.
+- **Energy-saving tips:** Explore suggestions for reducing electricity consumption.
+- **Meter connection information:** Learn about possible future integration with compatible smart meters and appliance-level monitoring devices.
+- **Responsive interface:** Use the website on supported desktop and mobile browsers.
+- **Local data storage:** Save supported settings and data in the browser using localStorage.
 
-## Meter integration note
-A single main meter usually measures whole-property consumption, not the individual consumption of each appliance. For appliance-level readings, use compatible metering smart plugs or circuit-level sub-meters. A real smart-meter connection also needs a supported interface/API, permission, and a secure integration service.
+## 🛠️ Technologies Used
 
+| Technology | Purpose |
+|---|---|
+| HTML5 | Structures the website content. |
+| CSS3 | Controls styling, layout, colours, and responsive design. |
+| JavaScript | Handles calculations, user interactions, alerts, and data management. |
+| Chart.js | Displays energy consumption data visually. |
+| Git | Tracks changes and maintains project versions. |
+| GitHub | Hosts the source code and supports collaboration. |
+| GitHub Pages | Publishes the website online. |
 
-## Recent additions
-- One-second WattWise branded splash screen before the dashboard.
-- Meter connection explainer: distinguishes a whole-home meter reading from appliance-level monitoring. The button is informational only; no hardware is connected.
-- JavaScript comments explain the major calculation, rendering, storage, and event-handling sections.
-- Project report: see `WattWise_Project_Report.pdf` (provided separately with the project ZIP).
+## ⚡ Energy Calculation Method
 
-## Meter integration note
-A single main meter usually measures whole-property consumption, not the individual consumption of each appliance. For appliance-level readings, use compatible metering smart plugs or circuit-level sub-meters. A real smart-meter connection also needs a supported interface/API, permission, and a secure integration service.
+WattWise estimates energy consumption using the following formula:
 
+**Energy consumption (kWh)**
 
-## Recent additions
-- One-second WattWise branded splash screen before the dashboard.
-- Meter connection explainer: distinguishes a whole-home meter reading from appliance-level monitoring. The button is informational only; no hardware is connected.
-- JavaScript comments explain the major calculation, rendering, storage, and event-handling sections.
-- Project report: see `WattWise_Project_Report.pdf` (provided separately with the project ZIP).
+Energy (kWh) = Power (W) × Quantity × Hours per day × Number of days ÷ 1,000
 
-## Meter integration note
-A single main meter usually measures whole-property consumption, not the individual consumption of each appliance. For appliance-level readings, use compatible metering smart plugs or circuit-level sub-meters. A real smart-meter connection also needs a supported interface/API, permission, and a secure integration service.
+**Estimated electricity cost**
 
+Cost = Energy consumption (kWh) × Electricity tariff (₦/kWh)
 
-## Recent additions
-- One-second WattWise branded splash screen before the dashboard.
-- Meter connection explainer: distinguishes a whole-home meter reading from appliance-level monitoring. The button is informational only; no hardware is connected.
-- JavaScript comments explain the major calculation, rendering, storage, and event-handling sections.
-- Project report: see `WattWise_Project_Report.pdf` (provided separately with the project ZIP).
+For example, a 1,000-watt appliance used for 5 hours per day over 30 days has an estimated consumption of:
 
-## Meter integration note
-A single main meter usually measures whole-property consumption, not the individual consumption of each appliance. For appliance-level readings, use compatible metering smart plugs or circuit-level sub-meters. A real smart-meter connection also needs a supported interface/API, permission, and a secure integration service.
+1,000 × 1 × 5 × 30 ÷ 1,000 = **150 kWh**
 
-## How WattWise Helps Save Energy
+At an illustrative tariff of ₦200 per kWh, the estimated cost is ₦30,000.
 
-WattWise estimates household electricity consumption and cost based on appliance power ratings, usage hours, and the electricity tariff entered by the user. It helps users identify high-consuming appliances, set spending limits, and explore ways to reduce electricity usage.
+Actual costs depend on the applicable tariff, billing arrangements, appliance behaviour, and real consumption.
 
-**Note:** WattWise provides estimates; it does not directly measure individual appliance consumption unless supported hardware is integrated in the future.
+## 🚀 How to Run the Project Locally
+
+1. Install [Visual Studio Code](https://code.visualstudio.com/).
+2. Download or clone this repository.
+3. Open the project folder in VS Code.
+4. Open `index.html` using a local development server, such as the Live Server extension.
+5. Use the website in your browser.
+
+No physical energy meter is required to use the estimation features.
+
+## 📂 Project Structure
+
+- `index.html` — website structure and content.
+- `styles.css` — visual styling and responsive layouts.
+- `app.js` — calculations, application logic, interactions, and data handling.
+- `README.md` — project documentation.
+- `WattWise_Project_Report.pdf` — project report included in the repository.
+
+## ⚠️ Limitations
+
+WattWise currently provides estimates based on user-entered appliance information and electricity tariffs. It does not independently measure actual electricity consumption or communicate with a physical prepaid meter.
+
+A main household meter normally measures combined consumption rather than identifying the exact consumption of every appliance. Individual appliance monitoring would require suitable smart plugs, sub-meters, compatible connected devices, or another supported measurement system.
+
+Browser-stored data may not automatically synchronise between devices.
+
+## 🔮 Future Improvements
+
+- Integrate compatible smart meters through an approved interface or API.
+- Support appliance-level measurements from suitable monitoring hardware.
+- Compare estimated consumption with actual meter readings.
+- Improve personalised energy-saving recommendations.
+- Add historical consumption reports and comparisons.
+- Explore secure cloud storage and user accounts.
+
+## 🌍 Sustainable Development Goal
+
+WattWise supports **SDG 7: Affordable and Clean Energy** by promoting awareness of electricity consumption, energy efficiency, and informed household energy management.
+
+## 👨‍💻 Project Information
+
+**Project:** WattWise — Smart Energy Saver  
+**Programme:** Programmer in Community Innovation Hub
+
+## 📄 Disclaimer
+
+WattWise is an educational project intended to demonstrate energy estimation and energy-awareness concepts. Its calculated values are estimates, not certified meter readings or guaranteed electricity bills.
