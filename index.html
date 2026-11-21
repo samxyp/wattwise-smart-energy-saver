@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A192F">
+  <meta name="description" content="WattWise estimates appliance electricity consumption and cost, with daily and weekly spending limits.">
+  <title>WattWise | Smart Energy Saver</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <!-- A short branded welcome screen appears before the dashboard. -->
+  <div class="splash-screen" id="splashScreen" role="status" aria-label="Loading WattWise">
+    <div class="splash-content">
+      <span class="splash-bolt" aria-hidden="true">⚡</span>
+      <p class="splash-kicker">SMART ENERGY SAVER</p>
+      <h1>Watt<span>Wise</span></h1>
+      <p class="splash-caption">Make every kilowatt count.</p>
+      <span class="splash-loader" aria-hidden="true"></span>
+    </div>
+  </div>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="WattWise home">
+        <span class="brand-mark">⚡</span>
+        <span><strong>WattWise</strong><small>SMART ENERGY SAVER</small></span>
+      </a>
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="nav-menu" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview"><span>◫</span> Overview</a>
+        <a class="nav-link" href="#appliance-form-section"><span>＋</span> Add appliance</a>
+        <a class="nav-link" href="#appliances-section"><span>▤</span> Appliances</a>
+        <a class="nav-link" href="#limits-section"><span>◎</span> Usage limits</a>
+        <a class="nav-link" href="#meter-section"><span>⌁</span> Meter connection</a>
+        <a class="nav-link" href="#insights-section"><span>✦</span> Energy insights</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sdg-card">
+          <span class="sdg-icon">7</span>
+          <div><strong>Affordable &amp; Clean Energy</strong><p>Supporting UN Sustainable Development Goal 7 through energy awareness.</p></div>
+        </div>
+        <p class="sidebar-note"><span class="status-dot"></span> Local estimate · No meter connection</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+          <div class="breadcrumb">Workspace <span>/</span> <strong>Energy overview</strong></div>
+        </div>
+        <div class="topbar-right"><span class="live-pill"><span></span> ESTIMATE MODE</span><div class="avatar">WW</div></div>
+      </header>
+
+      <section class="welcome-row" id="overview">
+        <div>
+          <p class="eyebrow">YOUR ENERGY, IN CLEAR VIEW</p>
+          <h1>Make every <span>kilowatt count.</span></h1>
+          <p class="welcome-copy">Understand your appliance usage, estimate electricity costs and set limits that keep your energy budget on track.</p>
+        </div>
+        <div class="welcome-actions">
+          <button class="btn btn-secondary" id="loadSample">↻ Load sample data</button>
+          <a class="btn btn-primary" href="#appliance-form-section">＋ Add appliance</a>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Energy summary">
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-icon gold-icon">ϟ</span><span class="stat-label">ESTIMATED MONTHLY ENERGY</span></div>
+          <strong class="stat-value" id="monthlyKwh">0 <small>kWh</small></strong>
+          <div class="stat-bottom"><span class="stat-note">Based on your appliance inputs</span><span class="stat-trend">↗</span></div>
+          <div class="progress-track"><span id="energyProgress"></span></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-icon blue-icon">₦</span><span class="stat-label">ESTIMATED MONTHLY COST</span></div>
+          <strong class="stat-value" id="monthlyCost">₦0</strong>
+          <div class="stat-bottom"><span class="stat-note">Uses your tariff setting</span><span class="stat-trend">↗</span></div>
+          <div class="progress-track"><span id="costProgress"></span></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span class="stat-icon purple-icon">▦</span><span class="stat-label">APPLIANCES TRACKED</span></div>
+          <strong class="stat-value" id="applianceCount">0</strong>
+          <div class="stat-bottom"><span class="stat-note">Items in your estimate</span><span class="stat-trend">＋</span></div>
+          <div class="progress-track"><span id="applianceProgress"></span></div>
+        </article>
+        <article class="stat-card savings-card">
+          <div class="stat-top"><span class="stat-icon green-icon">✦</span><span class="stat-label">POTENTIAL 10% SAVING</span></div>
+          <strong class="stat-value" id="potentialSavings">₦0</strong>
+          <div class="stat-bottom"><span class="stat-note">Illustrative saving target</span><span class="stat-trend">↓</span></div>
+          <div class="progress-track"><span id="savingsProgress"></span></div>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel chart-panel">
+          <div class="panel-heading">
+            <div><p class="eyebrow">CONSUMPTION BREAKDOWN</p><h2>Where your energy goes</h2><p class="panel-subtitle">Estimated energy by appliance for the selected period.</p></div>
+            <select id="period" class="select-control" aria-label="Select estimate period"><option value="day">Daily</option><option value="week">Weekly</option><option value="month" selected>Monthly</option></select>
+          </div>
+          <div class="chart-wrap"><canvas id="energyChart" aria-label="Doughnut chart showing estimated energy by appliance"></canvas><div class="chart-center"><span>ESTIMATED</span><strong id="chartTotal">0</strong><small>kWh / period</small></div></div>
+          <div id="chartLegend" class="chart-legend"></div>
+          <div class="chart-footer"><span class="chart-footer-dot"></span><span>Estimates update when appliance details or tariff change.</span><button class="text-button" id="refreshChart">Refresh chart ↗</button></div>
+        </article>
+
+        <article class="panel calculator-panel" id="appliance-form-section">
+          <div class="panel-heading"><div><p class="eyebrow">APPLIANCE CALCULATOR</p><h2>Add an appliance</h2><p class="panel-subtitle">Enter its rating and typical daily usage.</p></div><span class="heading-icon">＋</span></div>
+          <form id="applianceForm" novalidate>
+            <label for="applianceName">Appliance name</label>
+            <input id="applianceName" name="applianceName" type="text" maxlength="60" placeholder="e.g. Standing fan" required>
+            <div class="form-row">
+              <div><label for="watts">Power rating (W)</label><input id="watts" name="watts" type="number" min="1" max="100000" step="any" placeholder="75" required></div>
+              <div><label for="quantity">Quantity</label><input id="quantity" name="quantity" type="number" min="1" max="100" step="1" value="1" required></div>
+            </div>
+            <label for="hours">Hours used per day <span class="label-hint">0–24 hours</span></label>
+            <input id="hours" name="hours" type="number" min="0.1" max="24" step="0.1" value="8" required>
+            <label for="tariff">Electricity tariff (₦ per kWh)</label>
+            <div class="input-with-prefix"><span>₦</span><input id="tariff" name="tariff" type="number" min="0" max="1000000" step="any" value="100" required></div>
+            <p class="field-note">Use the tariff from your current bill. ₦100/kWh is an illustrative starting value.</p>
+            <button class="btn btn-primary btn-full" id="submitAppliance" type="submit">＋ Add to energy estimate</button>
+            <button class="btn btn-secondary btn-full hidden" id="cancelEdit" type="button">Cancel editing</button>
+            <p class="form-message" id="formMessage" aria-live="polite"></p>
+          </form>
+        </article>
+      </section>
+
+      <section class="panel limits-panel" id="limits-section">
+        <div class="panel-heading limits-heading">
+          <div><p class="eyebrow">BUDGET GUARDRAILS</p><h2>Daily &amp; weekly cost limits</h2><p class="panel-subtitle">Set your own estimated electricity-cost limits. Your settings are saved in this browser.</p></div>
+          <span class="heading-icon">◎</span>
+        </div>
+        <form id="limitsForm" class="limits-form" novalidate>
+          <div class="limit-input-group"><label for="dailyLimit">Daily limit (₦)</label><div class="input-with-prefix"><span>₦</span><input id="dailyLimit" type="number" min="0" step="any" placeholder="e.g. 500" required></div></div>
+          <div class="limit-input-group"><label for="weeklyLimit">Weekly limit (₦)</label><div class="input-with-prefix"><span>₦</span><input id="weeklyLimit" type="number" min="0" step="any" placeholder="e.g. 3500" required></div></div>
+          <button class="btn btn-primary save-limits" type="submit">Save limits</button>
+        </form>
+        <div class="limit-cards">
+          <article class="limit-card" id="dailyLimitCard">
+            <div class="limit-card-top"><span class="limit-symbol">☀</span><span class="limit-name">DAILY ESTIMATED COST</span><span class="limit-status" id="dailyStatus">Within limit</span></div>
+            <div class="limit-numbers"><strong id="dailyTotal">₦0</strong><span>of <b id="dailyLimitDisplay">₦0</b></span></div>
+            <div class="limit-track"><span id="dailyProgress"></span></div>
+            <p id="dailyLimitCaption">Set a daily limit to track your estimated cost.</p>
+          </article>
+          <article class="limit-card" id="weeklyLimitCard">
+            <div class="limit-card-top"><span class="limit-symbol">▦</span><span class="limit-name">WEEKLY ESTIMATED COST</span><span class="limit-status" id="weeklyStatus">Within limit</span></div>
+            <div class="limit-numbers"><strong id="weeklyTotal">₦0</strong><span>of <b id="weeklyLimitDisplay">₦0</b></span></div>
+            <div class="limit-track"><span id="weeklyProgress"></span></div>
+            <p id="weeklyLimitCaption">Set a weekly limit to track your estimated cost.</p>
+          </article>
+        </div>
+        <p class="limits-note"><span>ⓘ</span> These totals are estimates from your appliance list: daily cost is the estimated cost for one typical day, and weekly cost is daily cost × 7. They are not live prepaid-meter balances.</p>
+      </section>
+
+      <section class="panel meter-panel" id="meter-section">
+        <div class="panel-heading">
+          <div><p class="eyebrow">OPTIONAL HARDWARE INTEGRATION</p><h2>Connect an energy meter</h2><p class="panel-subtitle">A design preview for a future real-meter connection. No physical meter is connected in this demo.</p></div>
+          <span class="heading-icon">⌁</span>
+        </div>
+        <div class="meter-layout">
+          <div class="meter-status-card">
+            <div class="meter-status-top"><span class="meter-icon">ϟ</span><span class="meter-status-badge"><span class="status-dot"></span> DEMO MODE</span></div>
+            <h3>Household meter</h3>
+            <p id="meterStatusText">Not connected. Estimates currently come from appliance ratings and usage hours.</p>
+            <button class="btn btn-primary" id="checkMeterConnection" type="button">Check connection options</button>
+            <p class="meter-small-note" id="meterActionMessage" aria-live="polite">This button explains compatible options; it does not connect hardware.</p>
+          </div>
+          <div class="meter-methods">
+            <article class="meter-method"><span class="method-number">01</span><div><h3>One main prepaid / smart meter</h3><p>Reads the whole home's total kWh. It can show whether total usage is rising, but normally cannot identify how much each individual appliance used.</p><span class="method-tag">Whole-home total</span></div></article>
+            <article class="meter-method"><span class="method-number">02</span><div><h3>Smart meter data connection</h3><p>If the meter supports a documented API, HAN, or another approved data interface, a future backend/gateway could import readings with the owner's permission.</p><span class="method-tag">Requires compatible meter + integration</span></div></article>
+            <article class="meter-method"><span class="method-number">03</span><div><h3>Appliance-level monitoring</h3><p>Use compatible smart plugs for plug-in devices or circuit-level sub-meters installed by a qualified electrician. These provide separate measurements for selected loads.</p><span class="method-tag">Separate device / circuit readings</span></div></article>
+          </div>
+        </div>
+        <div class="meter-explainer"><strong>How WattWise would combine the data</strong><p>The app could compare the main meter's total with the sum of measured sub-meter or smart-plug readings. If only a main-meter reading is available, WattWise should display the whole-home total and keep per-appliance figures clearly labelled as estimates. It must not pretend that one meter has measured each appliance individually.</p></div>
+      </section>
+
+      <section class="panel appliances-panel" id="appliances-section">
+        <div class="panel-heading">
+          <div><p class="eyebrow">YOUR APPLIANCE LIST</p><h2>Tracked appliances</h2><p class="panel-subtitle">Review, edit or remove an item from your estimate.</p></div>
+          <button class="btn btn-secondary btn-small" id="clearAll" type="button">Clear all items</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>APPLIANCE</th><th>POWER</th><th>QTY</th><th>HOURS/DAY</th><th>MONTHLY ENERGY</th><th>MONTHLY COST</th><th>ACTIONS</th></tr></thead>
+            <tbody id="applianceRows"><tr class="empty-row"><td colspan="7"><div class="empty-state"><span>▤</span><strong>No appliances added yet</strong><p>Add an appliance above or load sample data to explore the dashboard.</p></div></td></tr></tbody>
+          </table>
+        </div>
+        <div class="table-bottom"><span id="tableSummary">0 appliances added</span><span class="table-hint">Select Edit to change an entry</span></div>
+      </section>
+
+      <section class="bottom-grid" id="insights-section">
+        <article class="panel tips-panel">
+          <div class="panel-heading"><div><p class="eyebrow">ACTION PLAN</p><h2>Simple ways to save</h2></div><span class="heading-icon">✦</span></div>
+          <div class="tip-list" id="tipList">
+            <div class="tip-item"><span class="tip-number">01</span><div><strong>Start with your biggest users</strong><p>Add appliances to see which ones account for the most estimated consumption.</p></div></div>
+            <div class="tip-item"><span class="tip-number">02</span><div><strong>Switch off idle devices</strong><p>Turn off lights, fans and electronics when they are not needed.</p></div></div>
+            <div class="tip-item"><span class="tip-number">03</span><div><strong>Choose efficient appliances</strong><p>LED lighting and energy-efficient appliances can reduce electricity demand.</p></div></div>
+          </div>
+        </article>
+        <article class="panel impact-panel">
+          <div class="impact-orb">♧</div><p class="eyebrow">SDG 7 · AFFORDABLE &amp; CLEAN ENERGY</p><h2>Small changes add up.</h2><p>Knowing where electricity goes can help households make informed choices, manage costs and reduce avoidable energy use.</p><div class="impact-stat"><div><strong id="impactKwh">0 kWh</strong><span>estimated energy per period</span></div><div><strong id="impactCost">₦0</strong><span>estimated cost per period</span></div></div>
+        </article>
+      </section>
+
+      <footer class="footer"><div class="brand-mini"><span class="brand-mark">⚡</span><strong>WattWise</strong></div><span>SDG 7 student project demo · HTML, CSS &amp; JavaScript</span><span class="footer-disclaimer">Estimates only — not a meter reading or utility bill.</span></footer>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="limitModal" hidden>
+    <section class="alert-modal" role="alertdialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+      <div class="alert-icon" aria-hidden="true">!</div>
+      <p class="eyebrow alert-eyebrow">BUDGET ALERT</p>
+      <h2 id="modalTitle">Limit Exceeded!</h2>
+      <p id="modalDescription" class="modal-description">Your estimated electricity cost is over your limit.</p>
+      <div class="modal-details" id="modalDetails"></div>
+      <button class="btn btn-primary btn-full" id="acknowledgeModal" type="button">Close / Acknowledge</button>
+    </section>
+  </div>
+</body>
+</html>
