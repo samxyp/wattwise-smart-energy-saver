@@ -75,3 +75,9 @@ A single main meter usually measures whole-property consumption, not the individ
 
 ## Meter integration note
 A single main meter usually measures whole-property consumption, not the individual consumption of each appliance. For appliance-level readings, use compatible metering smart plugs or circuit-level sub-meters. A real smart-meter connection also needs a supported interface/API, permission, and a secure integration service.
+
+## How WattWise Helps Save Energy
+
+WattWise estimates household electricity consumption and cost based on appliance power ratings, usage hours, and the electricity tariff entered by the user. It helps users identify high-consuming appliances, set spending limits, and explore ways to reduce electricity usage.
+
+**Note:** WattWise provides estimates; it does not directly measure individual appliance consumption unless supported hardware is integrated in the future.
